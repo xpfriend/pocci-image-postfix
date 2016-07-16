@@ -4,6 +4,13 @@ MAIN_CF=/etc/postfix/main.cf
 PASSWORD_FILE=/etc/postfix/smtp_password
 ALIASES_FILE=/etc/aliases
 
+if [ -f ${MAIN_CF}.backup ]; then
+    cp ${MAIN_CF}.backup ${MAIN_CF}
+else
+    cp ${MAIN_CF} ${MAIN_CF}.backup
+fi
+
+
 mkdir /var/mail
 chgrp mail /var/mail
 
@@ -37,6 +44,7 @@ if [ -n "${SMTP_RELAYHOST}" ]; then
     fi
 fi
 
+>${ALIASES_FILE}
 if [ -n "${SMTP_ALIASES}" ]; then
     for i in ${SMTP_ALIASES}; do
       echo $i >>${ALIASES_FILE}
